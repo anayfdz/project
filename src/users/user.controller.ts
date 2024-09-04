@@ -2,10 +2,11 @@ import { Controller, Post, Body, Get, Param, NotFoundException } from '@nestjs/c
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
-
+import { AuthService } from '../auth/auth.service'
+import { LoginDto } from './dto/login.dto';
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UserService) {}
+  constructor(private readonly usersService: UserService, private readonly authService: AuthService, ) {}
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto): Promise<User> {
@@ -19,5 +20,9 @@ export class UsersController {
       throw new NotFoundException('User not found');
     }
     return user;
+  }
+  @Post('login')
+  async login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 }

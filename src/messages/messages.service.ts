@@ -13,11 +13,11 @@ export class MessageService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(userId: number, content: string): Promise<Message> {
-    const user = await this.userRepository.findOneBy({ id: userId });
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+  async create(user: User, content: string): Promise<Message> {
+      const userFind = await this.userRepository.findOneBy({ id: user.id });
+      if (!userFind) {
+        throw new NotFoundException('User not found');
+      }
 
     const message = this.messageRepository.create({ content, user });
     return this.messageRepository.save(message);

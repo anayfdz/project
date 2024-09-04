@@ -37,11 +37,15 @@ import {
       try {
         const userId = parseInt(message.userId, 10);
         if (isNaN(userId)) {
-          throw new Error('Invalid userId');
+            throw new Error('Invalid userId');
         }
-  
-        const savedMessage = await this.messageService.create(userId, message.content);
-        this.server.emit('newMessage', savedMessage);
+        const user = await this.userService.findOne(userId);
+        if (user) {
+            const savedMessage = await this.messageService.create(user, message.content);
+            this.server.emit('newMessage', savedMessage);
+        } else {
+            console.error('User not found');
+        }
       } catch (err) {
         console.log('Error handling message:', err);
       }

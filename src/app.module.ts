@@ -5,6 +5,9 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { User } from './users/user.entity';
 import { Message } from './messages/message.entity';
+import { UserModule } from './users/user.module';
+import { AuthModule } from './auth/auth.module';
+import { MessageModule } from './messages/message.module';
 
 @Module({
   imports: [
@@ -26,6 +29,9 @@ import { Message } from './messages/message.entity';
         synchronize: true,
       }),
     }),
+    UserModule,
+    AuthModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService],

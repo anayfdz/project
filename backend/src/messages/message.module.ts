@@ -5,11 +5,10 @@ import { MessageService} from './messages.service';
 import { MessageGateway} from './messages.gateway';
 import { UserModule} from '../users/user.module';
 import { MessageController } from './message.controller';
-
 @Module({
     imports: [
       TypeOrmModule.forFeature([Message]),
-      UserModule,
+      UserModule
     ],
     controllers: [MessageController],
     providers: [

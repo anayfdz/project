@@ -3,6 +3,7 @@ import { MessageService } from './messages.service';
 import { UserService } from '../users/user.service';
 import { Message } from './message.entity';
 import { User } from '../users/user.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 @Controller('messages')
 export class MessageController {
   constructor(private readonly messageService: MessageService, private readonly userService: UserService) {}

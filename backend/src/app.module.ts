@@ -8,7 +8,6 @@ import { Message } from './messages/message.entity';
 import { UserModule } from './users/user.module';
 import { AuthModule } from './auth/auth.module';
 import { MessageModule } from './messages/message.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({

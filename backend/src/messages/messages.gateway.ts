@@ -9,7 +9,7 @@ import { Server, Socket } from 'socket.io';
 import { MessageService } from './messages.service';
 import { UserService } from '../users/user.service';
 
-@WebSocketGateway({ namespace: 'messages' })
+@WebSocketGateway({ namespace: 'messages', cors: true })
 export class MessageGateway {
     @WebSocketServer()
     server: Server;
@@ -25,6 +25,7 @@ export class MessageGateway {
         @MessageBody('content') content: string,
         @ConnectedSocket() client: Socket,
     ): Promise<void> {
+        try {
         const user = await this.userService.findOne(userId);
         if (user) {
             const message = await this.messageService.create(user, content);
@@ -32,9 +33,10 @@ export class MessageGateway {
         } else {
             console.error('User not found');
         }
-    }
-    catch(error) {
-        console.error('Error handling message:', error);
+
+    }catch(error) {
+            console.error('Error handling message:', error);
+        }
     }
     @SubscribeMessage('findAllMessages')
     async handleFindAllMessages(client: Socket): Promise<void> {

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Message } from './message.entity';
@@ -8,9 +8,15 @@ import { User} from '../users/user.entity';
 export class MessageService {
     constructor(
         @InjectRepository(Message)
-        private messageRepository: Repository<Message>
+        private messageRepository: Repository<Message>,
+        @InjectRepository(User) 
+        private userRepository: Repository<User>,
     ) {}
-    async create(content: string, user: User): Promise<Message> {
+    async create(content: string, userId: number): Promise<Message> {
+        const user = await this.userRepository.findOneBy({ id: userId});
+        if(!user) {
+            throw new NotFoundException('User not found');
+        }
         const message = this.messageRepository.create({ content, user});
         return this.messageRepository.save(message);
     }

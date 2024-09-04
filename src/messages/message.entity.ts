@@ -7,6 +7,8 @@ export class Message {
   id: number;
   @Column()
   content: string;
+  @Column()
+  timestamp: Date;
   @ManyToOne(() => User, user => user.messages)
   user: User;
 }

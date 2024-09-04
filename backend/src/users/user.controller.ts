@@ -4,13 +4,15 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.entity';
 import { AuthService } from '../auth/auth.service'
 import { LoginDto } from './dto/login.dto';
+import { RegisterResponseDto } from './dto/register-response.dto';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UserService, private readonly authService: AuthService, ) {}
 
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
+  async register(@Body() createUserDto: CreateUserDto): Promise<RegisterResponseDto> {
+    await this.usersService.create(createUserDto);
+    return { message: 'User registered successfully' };
   }
 
   @Get(':id')
@@ -20,9 +22,5 @@ export class UsersController {
       throw new NotFoundException('User not found');
     }
     return user;
-  }
-  @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
   }
 }

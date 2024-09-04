@@ -7,10 +7,18 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Post('register')
+  async register(@Body() body: { username: string; password: string}) {
+    const { username, password } = body;
+    return this.authService.register(username, password);
+  }
+    
+
   @Post('login')
   @UseGuards(LocalAuthGuard)
-  async login(@Req() req) {
-    return this.authService.login(req.user);
+  async login(@Body() body: { username: string; password: string }) {
+    const { username, password } = body;
+    return this.authService.login(username, password);
   }
 
   @Post('protected')

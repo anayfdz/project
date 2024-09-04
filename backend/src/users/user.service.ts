@@ -11,6 +11,8 @@ export class UserService {
         @InjectRepository(User)
         private userRepository: Repository<User>,
     ){}
+
+    
     async create(createUserDto: CreateUserDto): Promise<User> {
         const { username, password } = createUserDto;
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -18,10 +20,14 @@ export class UserService {
         return this.userRepository.save(user);
     }
     async findOne(id: number): Promise<User> {
-        return this.userRepository.findOne({ where: { id}})
+        const user = await this.userRepository.findOneBy({ id})
+        if (!user) {
+            throw new NotFoundException(`User with id ${id} not found`);
+        }
+        return user;
     }
     async findByUsername(username: string): Promise<User> {
-        return this.userRepository.findOne({ where: { username}})
+        return this.userRepository.findOneBy({ username})
     }
     async validateUser(username: string, password: string): Promise<User> {
         const user = await this.findByUsername(username);
